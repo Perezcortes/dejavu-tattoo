@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { 
   ArrowLeft, 
   ArrowRight,
@@ -23,42 +22,61 @@ export default function TermsPage() {
   const [activeSection, setActiveSection] = useState('intro');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Función para scroll suave
+  // Función para scroll suave y cerrar menú en móvil
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Ajuste del offset para que el navbar no tape el título
+      const yOffset = -100; 
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      
+      window.scrollTo({ top: y, behavior: 'smooth' });
       setActiveSection(id);
       setIsMobileMenuOpen(false);
     }
   };
 
   return (
-    <main className="min-h-screen bg-dark text-gray-300 font-sans selection:bg-primary selection:text-white">
+    <main className="min-h-screen bg-dark text-gray-300 font-sans selection:bg-primary selection:text-white relative">
       
+      {/* --- BOTÓN FLOTANTE WHATSAPP --- */}
+      <a 
+        href="https://wa.me/529531447499" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#20bd5a] text-white p-4 rounded-full shadow-lg shadow-black/50 transition-all duration-300 hover:scale-110 flex items-center justify-center"
+        aria-label="Contactar por WhatsApp"
+      >
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+      </a>
+
       {/* --- NAVBAR SIMPLIFICADO --- */}
       <nav className="fixed w-full z-50 bg-dark/95 backdrop-blur-md border-b border-white/5 h-20 flex items-center justify-between px-6 lg:px-12">
         <Link href="/" className="flex items-center gap-3 group">
           <ArrowLeft className="text-primary group-hover:-translate-x-1 transition-transform" />
-          <span className="text-sm font-bold tracking-widest uppercase text-white">Volver al Inicio</span>
+          <span className="text-sm font-bold tracking-widest uppercase text-white hidden sm:block">Inicio</span>
+          <span className="text-sm font-bold tracking-widest uppercase text-white sm:hidden">Atrás</span>
         </Link>
         
         <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="Logo" className="h-20 w-auto opacity-80" />
-            <span className="font-display font-bold text-xl text-white hidden sm:block">DEJA VU</span>
+            <img src="/logo.png" alt="Logo" className="h-12 w-auto opacity-80" />
+            <span className="font-display font-bold text-xl text-white hidden md:block">DEJA VU</span>
         </div>
 
         {/* Botón menú móvil para la tabla de contenidos */}
         <button 
-          className="lg:hidden text-primary"
+          className="lg:hidden text-primary p-2"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Abrir índice"
         >
-          {isMobileMenuOpen ? <X /> : <Menu />}
+          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </nav>
 
       {/* --- HERO HEADER --- */}
-      <header className="relative pt-40 pb-20 px-6 bg-surface-dark border-b border-white/5 overflow-hidden">
+      <header className="relative pt-32 pb-16 md:pt-40 md:pb-20 px-6 bg-surface-dark border-b border-white/5 overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] opacity-20"></div>
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary/5 to-transparent pointer-events-none"></div>
         
@@ -79,13 +97,14 @@ export default function TermsPage() {
       {/* --- CONTENIDO PRINCIPAL --- */}
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row py-12 px-6 gap-12 relative">
         
-        {/* SIDEBAR DE NAVEGACIÓN (Sticky en Desktop) */}
+        {/* SIDEBAR DE NAVEGACIÓN (Sticky en Desktop, Drawer en Móvil) */}
         <aside className={`
             fixed inset-0 z-40 bg-dark/95 backdrop-blur-xl lg:bg-transparent lg:static lg:w-1/4 lg:block
-            flex flex-col justify-center px-8 lg:px-0 transition-all duration-300
+            flex flex-col justify-center px-8 lg:px-0 transition-transform duration-300 ease-in-out
             ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}>
           <div className="lg:sticky lg:top-32 space-y-6">
+            <h3 className="text-white font-display text-xl border-l-4 border-primary pl-4 block lg:hidden mb-4">Índice del Documento</h3>
             <h3 className="text-white font-display text-xl border-l-4 border-primary pl-4 hidden lg:block">Índice</h3>
             
             <nav className="flex flex-col space-y-1">
@@ -112,7 +131,7 @@ export default function TermsPage() {
               ))}
             </nav>
 
-            <div className="p-6 bg-surface-dark rounded-xl border border-white/5 mt-8 hidden lg:block">
+            <div className="p-6 bg-surface-dark rounded-xl border border-white/5 mt-8 block">
               <p className="text-white text-sm font-bold mb-2">¿Dudas?</p>
               <p className="text-xs text-gray-500 mb-4">Contáctanos directamente si algo no queda claro.</p>
               <a href="https://wa.me/529531447499" className="text-primary text-xs font-bold uppercase tracking-widest hover:underline flex items-center gap-2">

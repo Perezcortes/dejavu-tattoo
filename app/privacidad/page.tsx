@@ -5,15 +5,16 @@ import Link from 'next/link';
 import { 
   ArrowLeft, 
   ShieldCheck, 
-  Eye, 
-  Phone,
   Server, 
   Share2, 
   Cookie, 
   Mail, 
   Menu, 
   X,
-  ArrowRight
+  ArrowRight,
+  UserCheck,
+  Phone,
+  Banknote
 } from 'lucide-react';
 
 export default function PrivacyPage() {
@@ -24,7 +25,10 @@ export default function PrivacyPage() {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Ajuste del offset
+      const yOffset = -100; 
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
       setActiveSection(id);
       setIsMobileMenuOpen(false);
     }
@@ -37,27 +41,28 @@ export default function PrivacyPage() {
       <nav className="fixed w-full z-50 bg-dark/95 backdrop-blur-md border-b border-white/5 h-20 flex items-center justify-between px-6 lg:px-12">
         <Link href="/" className="flex items-center gap-3 group">
           <ArrowLeft className="text-primary group-hover:-translate-x-1 transition-transform" />
-          <span className="text-sm font-bold tracking-widest uppercase text-white">Volver al Inicio</span>
+          <span className="text-sm font-bold tracking-widest uppercase text-white hidden sm:block">Inicio</span>
+          <span className="text-sm font-bold tracking-widest uppercase text-white sm:hidden">Atrás</span>
         </Link>
         
         <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="Logo" className="h-20 w-auto opacity-80" />
-            <span className="font-display font-bold text-xl text-white hidden sm:block">DEJA VU</span>
+            <img src="/logo.png" alt="Logo" className="h-12 w-auto opacity-80" />
+            <span className="font-display font-bold text-xl text-white hidden md:block">DEJA VU</span>
         </div>
 
         {/* Botón menú móvil */}
         <button 
-          className="lg:hidden text-primary"
+          className="lg:hidden text-primary p-2"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Abrir menú"
         >
-          {isMobileMenuOpen ? <X /> : <Menu />}
+          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </nav>
 
       {/* --- HERO HEADER --- */}
-      <header className="relative pt-40 pb-20 px-6 bg-surface-dark border-b border-white/5 overflow-hidden">
+      <header className="relative pt-32 pb-16 md:pt-40 md:pb-20 px-6 bg-surface-dark border-b border-white/5 overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] opacity-20"></div>
-        {/* Fondo radial sutil */}
         <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none" style={{ background: 'radial-gradient(circle at 70% 20%, #D15611 0%, transparent 60%)' }}></div>
         
         <div className="max-w-6xl mx-auto relative z-10 flex flex-col items-center text-center">
@@ -78,15 +83,16 @@ export default function PrivacyPage() {
       </header>
 
       {/* --- CONTENIDO PRINCIPAL --- */}
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row py-16 px-6 gap-16 relative">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row py-12 px-6 gap-12 relative">
         
-        {/* SIDEBAR DE NAVEGACIÓN (Sticky en Desktop) */}
+        {/* SIDEBAR DE NAVEGACIÓN (Sticky Desktop / Drawer Mobile) */}
         <aside className={`
             fixed inset-0 z-40 bg-dark/95 backdrop-blur-xl lg:bg-transparent lg:static lg:w-1/4 lg:block
-            flex flex-col justify-center px-8 lg:px-0 transition-all duration-300
+            flex flex-col justify-center px-8 lg:px-0 transition-transform duration-300 ease-in-out
             ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}>
           <div className="lg:sticky lg:top-32 space-y-6">
+            <h3 className="text-white font-display text-xl border-l-4 border-primary pl-4 block lg:hidden mb-4">Índice</h3>
             <h3 className="text-white font-display text-xl border-l-4 border-primary pl-4 hidden lg:block">Contenido</h3>
             
             <nav className="flex flex-col space-y-2">
@@ -113,14 +119,15 @@ export default function PrivacyPage() {
               ))}
             </nav>
 
-            {/* Caja de ayuda */}
-            <div className="p-6 bg-gradient-to-br from-surface-dark to-black rounded-xl border border-white/5 mt-8 hidden lg:block text-center">
+            <div className="p-6 bg-gradient-to-br from-surface-dark to-black rounded-xl border border-white/5 mt-8 block">
               <ShieldCheck className="w-8 h-8 text-primary mx-auto mb-3" />
-              <h4 className="text-white font-bold text-sm mb-2">¿Tienes dudas?</h4>
-              <p className="text-xs text-gray-500 mb-4">Nuestro equipo legal está disponible para resolver cualquier inquietud.</p>
-              <a href="mailto:privacidad@dejavubodyart.com" className="inline-block px-4 py-2 bg-white/5 hover:bg-primary hover:text-white rounded text-xs font-bold transition-colors uppercase tracking-wider text-gray-400">
-                Contactar Soporte
-              </a>
+              <h4 className="text-white font-bold text-sm mb-2 text-center">¿Tienes dudas?</h4>
+              <p className="text-xs text-gray-500 mb-4 text-center">Nuestro equipo legal está disponible para resolver cualquier inquietud.</p>
+              <div className="text-center">
+                <a href="mailto:privacidad@dejavubodyart.com" className="inline-block px-4 py-2 bg-white/5 hover:bg-primary hover:text-white rounded text-xs font-bold transition-colors uppercase tracking-wider text-gray-400">
+                  Contactar Soporte
+                </a>
+              </div>
             </div>
           </div>
         </aside>
@@ -274,18 +281,33 @@ export default function PrivacyPage() {
 
           <div className="h-px w-full bg-gradient-to-r from-primary/50 to-transparent my-12 opacity-50"></div>
 
-          {/* CONTACTO */}
+          {/* CONTACTO (FIXED OVERFLOW) */}
           <section id="contact" className="scroll-mt-32">
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary to-orange-900 p-8 md:p-12 text-white text-center">
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary to-orange-900 p-6 md:p-12 text-white text-center">
               <div className="relative z-10">
-                <h2 className="text-3xl font-bold font-display mb-4">¿Preguntas sobre tu privacidad?</h2>
+                <h2 className="text-2xl md:text-3xl font-bold font-display mb-4">¿Preguntas sobre tu privacidad?</h2>
                 <p className="max-w-2xl mx-auto mb-8 opacity-90 text-sm md:text-base">
                   Si tienes alguna pregunta sobre este Aviso de Privacidad, las prácticas de este sitio o tus tratos con nosotros, por favor contáctanos.
                 </p>
-                <a href="mailto:privacidad@dejavubodyart.com" className="inline-flex items-center gap-3 bg-white text-primary px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:scale-105">
-                  <Mail className="w-5 h-5" />
-                  privacidad@dejavubodyart.com
+                
+                {/* --- BOTÓN DE CONTACTO CORREGIDO PARA MÓVIL --- */}
+                <a 
+                  href="mailto:privacidad@dejavubodyart.com" 
+                  className="
+                    inline-flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 
+                    bg-white text-primary 
+                    px-6 py-3 sm:px-8 
+                    rounded-full font-bold 
+                    hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:scale-105
+                    max-w-full
+                  "
+                >
+                  <Mail className="w-5 h-5 shrink-0" />
+                  <span className="text-xs sm:text-base break-all sm:break-normal">
+                    privacidad@dejavubodyart.com
+                  </span>
                 </a>
+                
               </div>
             </div>
           </section>
@@ -297,34 +319,17 @@ export default function PrivacyPage() {
       <footer className="bg-black border-t border-white/10 py-10 text-center">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
-            <img src="/logo.png" alt="Logo" className="h-16 w-auto grayscale opacity-50" />
+            <img src="/logo.png" alt="Logo" className="h-6 w-auto grayscale opacity-50" />
             <span className="text-gray-600 text-xs font-mono uppercase tracking-widest">© 2025 Deja Vu Body Art.</span>
           </div>
           <div className="flex gap-6 text-xs text-gray-500 font-bold uppercase tracking-wider">
-            <Link href="/terminos" className="hover:text-primary transition-colors">Términos</Link>
-            <Link href="/privacidad" className="text-primary transition-colors">Privacidad</Link>
+            <Link href="/terms" className="hover:text-primary transition-colors">Términos</Link>
+            <Link href="/privacy" className="text-primary transition-colors">Privacidad</Link>
             <Link href="#" className="hover:text-primary transition-colors">Cookies</Link>
           </div>
         </div>
       </footer>
 
     </main>
-  );
-}
-
-// Iconos adicionales importados para este componente
-function UserCheck({ className }: { className?: string }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/>
-    </svg>
-  );
-}
-
-function Banknote({ className }: { className?: string }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/>
-    </svg>
   );
 }
