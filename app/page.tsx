@@ -1,9 +1,9 @@
-"use client"; // Necesario para la interactividad del menú móvil
+"use client";
 
 import React, { useState } from 'react';
 import { 
   Menu, 
-  X, // Icono para cerrar menú
+  X, 
   ArrowRight, 
   Droplets, 
   Syringe, 
@@ -14,11 +14,11 @@ import {
   Phone, 
   Instagram, 
   Facebook, 
-  ChevronDown
+  ChevronDown,
+  User // Nuevo icono importado
 } from 'lucide-react';
 
 export default function Home() {
-  // Estado para controlar el menú en celular
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -47,16 +47,16 @@ export default function Home() {
               <img 
                 src="/logo.png" 
                 alt="Deja Vu Logo" 
-                className="h-20 md:h-20 w-auto object-contain filter drop-shadow-[0_0_5px_rgba(209,86,17,0.5)]" 
+                className="h-16 md:h-20 w-auto object-contain filter drop-shadow-[0_0_5px_rgba(209,86,17,0.5)]" 
               />
-              <span className="font-display font-bold text-2xl md:text-3xl text-primary tracking-widest uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary-light to-primary drop-shadow-sm">
+              <span className="font-display font-bold text-2xl md:text-3xl text-primary tracking-widest uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary-light to-primary drop-shadow-sm hidden sm:block">
                 Deja Vu
               </span>
             </div>
 
             {/* Menú Desktop */}
             <div className="hidden md:block">
-              <div className="ml-10 flex items-center space-x-8 lg:space-x-12">
+              <div className="ml-10 flex items-center space-x-8">
                 <a className="text-sm font-mono tracking-widest uppercase hover:text-primary transition-colors duration-300 relative group" href="#gallery">
                   Trabajos
                   <span className="absolute -bottom-2 left-0 w-0 h-px bg-primary transition-all duration-300 group-hover:w-full"></span>
@@ -69,8 +69,19 @@ export default function Home() {
                   Ropa
                   <span className="absolute -bottom-2 left-0 w-0 h-px bg-primary transition-all duration-300 group-hover:w-full"></span>
                 </a>
-                <a className="px-6 py-2 md:px-8 md:py-3 border border-primary/50 text-primary hover:bg-primary hover:text-white transition-all duration-500 font-mono text-xs font-bold uppercase tracking-[0.2em]" href="#booking">
-                  Agendar Cita
+                
+                {/* Botón Agendar Cita */}
+                <a className="px-6 py-2 border border-primary/50 text-primary hover:bg-primary/10 transition-all duration-300 font-mono text-xs font-bold uppercase tracking-[0.2em] rounded-sm" href="#booking">
+                  Agendar
+                </a>
+
+                {/* BOTÓN ACCEDE MEJORADO (Desktop) */}
+                <a 
+                  href="/login" 
+                  className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-primary to-orange-700 text-white font-mono text-xs font-bold uppercase tracking-widest hover:shadow-[0_0_20px_rgba(209,86,17,0.6)] hover:-translate-y-0.5 transition-all duration-300 rounded-sm"
+                >
+                  <User className="w-4 h-4" />
+                  <span>Acceder</span>
                 </a>
               </div>
             </div>
@@ -88,12 +99,22 @@ export default function Home() {
         </div>
 
         {/* Menú Desplegable Móvil */}
-        <div className={`md:hidden absolute top-24 left-0 w-full bg-dark/95 border-b border-primary/20 backdrop-blur-xl transition-all duration-300 overflow-hidden ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-          <div className="px-4 pt-2 pb-6 space-y-4 flex flex-col text-center">
-            <a onClick={() => setIsMenuOpen(false)} className="text-gray-300 hover:text-primary block px-3 py-3 font-mono uppercase tracking-widest text-sm" href="#gallery">Trabajos</a>
-            <a onClick={() => setIsMenuOpen(false)} className="text-gray-300 hover:text-primary block px-3 py-3 font-mono uppercase tracking-widest text-sm" href="#supplies">Suministros</a>
-            <a onClick={() => setIsMenuOpen(false)} className="text-gray-300 hover:text-primary block px-3 py-3 font-mono uppercase tracking-widest text-sm" href="#apparel">Ropa</a>
-            <a onClick={() => setIsMenuOpen(false)} className="bg-primary text-black block px-3 py-4 font-mono font-bold uppercase tracking-widest text-sm mx-4 rounded-sm" href="#booking">Agendar Cita</a>
+        <div className={`md:hidden absolute top-24 left-0 w-full bg-dark/95 border-b border-primary/20 backdrop-blur-xl transition-all duration-300 overflow-hidden ${isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="px-6 pt-4 pb-8 space-y-4 flex flex-col text-center">
+            <a onClick={() => setIsMenuOpen(false)} className="text-gray-300 hover:text-primary block py-3 font-mono uppercase tracking-widest text-sm border-b border-white/5" href="#gallery">Trabajos</a>
+            <a onClick={() => setIsMenuOpen(false)} className="text-gray-300 hover:text-primary block py-3 font-mono uppercase tracking-widest text-sm border-b border-white/5" href="#supplies">Suministros</a>
+            <a onClick={() => setIsMenuOpen(false)} className="text-gray-300 hover:text-primary block py-3 font-mono uppercase tracking-widest text-sm border-b border-white/5" href="#apparel">Ropa</a>
+            
+            <div className="flex flex-col gap-3 mt-4">
+              <a onClick={() => setIsMenuOpen(false)} className="border border-primary text-primary block py-3 font-mono font-bold uppercase tracking-widest text-sm rounded-sm" href="#booking">
+                Agendar Cita
+              </a>
+              {/* BOTÓN ACCEDE (Móvil) */}
+              <a onClick={() => setIsMenuOpen(false)} className="bg-primary text-white block py-3 font-mono font-bold uppercase tracking-widest text-sm rounded-sm flex items-center justify-center gap-2 shadow-lg shadow-primary/20" href="/login">
+                <User className="w-4 h-4" />
+                Acceder
+              </a>
+            </div>
           </div>
         </div>
       </nav>
@@ -136,7 +157,7 @@ export default function Home() {
         </div>
         
         {/* Flecha de scroll */}
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce duration-1000">
+        <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce duration-1000">
           <span className="text-[10px] uppercase tracking-[0.3em] text-primary/70 mb-2">Scroll</span>
           <ChevronDown className="text-primary/70 w-6 h-6" />
         </div>
@@ -451,8 +472,8 @@ export default function Home() {
               © 2025 Deja Vu Body Art. Todos los derechos reservados.
             </div>
             <div className="flex space-x-8">
-              <a className="text-[10px] text-gray-600 hover:text-gray-400 font-mono uppercase tracking-widest" href="#">Privacidad</a>
-              <a className="text-[10px] text-gray-600 hover:text-gray-400 font-mono uppercase tracking-widest" href="#">Términos</a>
+              <a className="text-[10px] text-gray-600 hover:text-gray-400 font-mono uppercase tracking-widest" href="/privacidad">Privacidad</a>
+              <a className="text-[10px] text-gray-600 hover:text-gray-400 font-mono uppercase tracking-widest" href="/terminos">Términos</a>
             </div>
           </div>
         </div>
